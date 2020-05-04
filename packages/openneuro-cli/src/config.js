@@ -33,6 +33,7 @@ export const saveConfig = config => {
 export const getToken = () => {
   const config = JSON.parse(readConfig())
   if (config.hasOwnProperty('apikey')) {
+    console.log({ apikey: config.apikey })
     return config.apikey
   } else {
     throw new Error(

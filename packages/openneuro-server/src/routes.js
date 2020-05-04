@@ -35,7 +35,7 @@ const routes = [
   {
     method: 'get',
     url: '/users/self',
-    middleware: [jwt.authenticate, auth.authenticated],
+    middleware: [jwt.authenticate, jwt.handleRefresh, auth.authenticated],
     handler: verifyUser,
   },
 
@@ -62,19 +62,19 @@ const routes = [
   {
     method: 'post',
     url: '/subscriptions/:datasetId',
-    middleware: [jwt.authenticate, auth.authenticated],
+    middleware: [jwt.authenticate, jwt.handleRefresh, auth.authenticated],
     handler: subscriptions.create,
   },
   {
     method: 'delete',
     url: '/subscriptions/:datasetId/:userId',
-    middleware: [jwt.authenticate, auth.authenticated],
+    middleware: [jwt.authenticate, jwt.handleRefresh, auth.authenticated],
     handler: subscriptions.deleteSubscription,
   },
   {
     method: 'delete',
     url: '/subscriptions/:datasetId',
-    middleware: [jwt.authenticate, auth.authenticated],
+    middleware: [jwt.authenticate, jwt.handleRefresh, auth.authenticated],
     handler: subscriptions.deleteAll,
   },
 
@@ -82,7 +82,7 @@ const routes = [
   {
     method: 'post',
     url: '/doi/:datasetId/:snapshotId',
-    middleware: [jwt.authenticate, auth.authenticated],
+    middleware: [jwt.authenticate, jwt.handleRefresh, auth.authenticated],
     handler: doi.createSnapshotDoi,
   },
   {
@@ -95,7 +95,7 @@ const routes = [
   {
     method: 'post',
     url: '/keygen',
-    middleware: [jwt.authenticate, auth.authenticated],
+    middleware: [jwt.authenticate, jwt.handleRefresh, auth.authenticated],
     handler: users.createAPIKey,
   },
 
@@ -115,13 +115,13 @@ const routes = [
   {
     method: 'get',
     url: '/datasets/:datasetId/download',
-    middleware: [jwt.authenticate, auth.optional],
+    middleware: [jwt.authenticate, jwt.handleRefresh, auth.optional],
     handler: download.datasetDownload,
   },
   {
     method: 'get',
     url: '/datasets/:datasetId/snapshots/:snapshotId/download',
-    middleware: [jwt.authenticate, auth.optional],
+    middleware: [jwt.authenticate, jwt.handleRefresh, auth.optional],
     handler: download.snapshotDownload,
   },
 
@@ -177,10 +177,15 @@ const routes = [
 
 const router = express.Router()
 
+const test = (...args) => console.log(args)
+
 for (const route of routes) {
+  console.log(route.url)
   const arr = route.hasOwnProperty('middleware') ? route.middleware : []
   arr.unshift(route.url)
   arr.push(route.handler)
+  console.log(arr)
+  test(...arr)
   router[route.method](...arr)
 }
 

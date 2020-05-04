@@ -6,6 +6,7 @@ export const requestAuth = passport.authenticate('google', {
     'https://www.googleapis.com/auth/userinfo.profile',
   ],
   session: false,
+  accessType: 'offline',
 })
 
 export const authCallback = passport.authenticate('google', {

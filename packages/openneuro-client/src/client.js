@@ -156,6 +156,9 @@ const createClient = (uri, options = {}) => {
     clientVersion = version,
     links = [],
   } = options
+  console.log('CREATING CLIENT')
+  console.log(options)
+  console.log('=====')
   // createLink must be last since it contains a terminating link
   const composedLink = ApolloLink.from([
     compareVersionsLink(clientVersion),
